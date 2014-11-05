@@ -1,11 +1,11 @@
-<h1>Li' Twitter!</h1>
-<table ng-repeat="tweet in tweets">
+<h1>Single Tweet</h1>
+<table>
 	<tbody>
 		<tr>
 			<td><a ng-href="#/tweets/{{tweet.id}}">{{ tweet.content }}</a></td>
 			<td>{{ tweet.handle }}</td>
 			<td>{{ tweet.username }}</td>
-			<td><a href="#/tweets/{{tweet.id}}"><img class="user_icon" src="{{ tweet.avatar_url }}"></img></a></td>
+			<td><img class="user_icon" src="{{ tweet.avatar_url }}"></img></td>
 		</tr>
 	</tbody>
 </table>
