@@ -1,11 +1,31 @@
-<h1>Li' Twitter!</h1>
-<table ng-repeat="tweet in tweets">
-	<tbody>
-		<tr>
-			<td><a ng-href="#/tweets/{{tweet.id}}">{{ tweet.content }}</a></td>
-			<td>{{ tweet.handle }}</td>
-			<td>{{ tweet.username }}</td>
-			<td><a href="#/tweets/{{tweet.id}}"><img class="user_icon" src="{{ tweet.avatar_url }}"></img></a></td>
-		</tr>
-	</tbody>
-</table>
+
+  <div class="large-2 columns">
+
+  </div>
+
+  <div class="large-8 columns">
+    <h1>Li' Twitter!</h1>
+
+    <form ng-submit="newTweet()">
+      <textarea class="form" type="text" ng-model="text" size="30" >Write your Tweet here!</textarea>
+      <button type="submit">Tweet!</button>
+    </form>
+
+    <table ng-repeat="tweet in tweets">
+     <tbody>
+      <tr>
+       <td><a ng-href="#/tweets/{{tweet.id}}">{{ tweet.content }}</a></td>
+       <td>{{ tweet.handle }}</td>
+       <td>{{ tweet.username }}</td>
+       <td><a href="#/tweets/{{tweet.id}}"><img class="user_icon" src="{{ tweet.avatar_url }}"></img></a></td>
+      </tr>
+     </tbody>
+    </table>
+  </div>
+
+  <div class="large-2 columns">
+    <h3>Popular Hashtags</h3>
+    <ul ng-repeat="hashtag in hashtags">
+      <li>{{hashtag}}</li>
+    </ul>
+  </div>

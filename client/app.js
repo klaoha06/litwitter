@@ -2,12 +2,16 @@
 	var app = angular.module('liTwitter', ['ngRoute', 'ngResource']);
 
 	app.factory("getTweets", function($resource) {
-		return $resource("http://localhost:3000/tweets/recent")
+		return $resource("http://localhost:3000/tweets/recent");
+	});
+
+	app.factory('getHashtags', function($resource) {
+		return $resource("http://localhost:3000/hashtags/popular");
 	});
 
 	app.factory("getTweet", function($resource) {
-		return EventService.get({id: 50})
-	})
+		return $resource('http://localhost:3000/tweets/', {id: '@id'});
+	});
 
 	app.config(function ($routeProvider) {
 		$routeProvider
@@ -21,26 +25,54 @@
 		});
 	});
 
-	var cachedData;
+	var cachedTweets;
+	var cachedHashtags;
+	var thisTweet;
 
-	app.controller('LTcontroller', function($scope, getTweets) {
-		if (cachedData) {
-			$scope.tweets = cachedData
+	app.controller('LTcontroller', function($scope, $http, getTweets, getHashtags) {
+		// Handling Tweets
+		if (cachedTweets) {
+			$scope.tweets = cachedTweets;
 		}
 		else {
 			getTweets.query(function(data) {
-				cachedData = data;
-				$scope.tweets = cachedData;
-			})
+				cachedTweets = data;
+				$scope.tweets = cachedTweets;
+			});
+		}
+
+		// Handling Tweets
+		if (cachedHashtags) {
+			$scope.hashtags = cachedHashtags;
+		}
+		else {
+			getHashtags.query(function(data) {
+				cachedHashtags = data;
+				$scope.hashtags = cachedHashtags;
+			});
+		}
+
+		// New Tweet
+		$scope.newTweet = function () {
+			console.log($scope.text);
+			$http.post('http://localhost:3000/tweets', {tweet: {content: $scope.text}}).
+			success(function(data){
+				$scope.tweets.unshift(data);
+				$scope.text = '';
+			});
 		};
 	});
 
-	app.controller('tweetCtl', function($scope, $http, $filter, $routeParams, $location) {
+	app.controller('tweetCtl', function($scope, $http, $filter, $routeParams, $location, getTweet) {
 		var tweetId = $routeParams.tweetId;
-		console.log(tweetId);
-		console.log(cachedData)
-		console.log($scope.tweets)
-		$scope.tweet = $filter('filter')(cachedData, {id:tweetId})[0];
-	})
+		if (cachedTweets) {
+			$scope.tweet = $filter('filter')(cachedTweets, {id:tweetId})[0];
+		}
+		else {
+			getTweet.get({id: tweetId}, function(tweet) {
+				$scope.tweet = tweet;
+			});
+		}
+	});
 
 })();
