@@ -15,6 +15,7 @@ class TweetsController < ApplicationController
   end
 
   def create
+    params.permit!
     tweet = Tweet.new(params[:tweet])
     tweet.content ||= Faker::Lorem.sentence
     tweet.username ||= Faker::Name.name
