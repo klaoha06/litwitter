@@ -5,6 +5,7 @@
 
   <div class="large-8 columns">
     <h1>Li' Twitter!</h1>
+    <div ng-model="now">{{now}}</div>
 
     <form ng-submit="newTweet()">
       <textarea class="form" type="text" ng-model="text" size="30" >Write your Tweet here!</textarea>
@@ -16,8 +17,10 @@
       <tr>
        <td><a ng-href="#/tweets/{{tweet.id}}">{{ tweet.content }}</a></td>
        <td>{{ tweet.handle }}</td>
+       <td>{{ tweet.hashtag_names }}</td>
        <td>{{ tweet.username }}</td>
        <td><a href="#/tweets/{{tweet.id}}"><img class="user_icon" src="{{ tweet.avatar_url }}"></img></a></td>
+       <td am-time-ago="tweet.created_at"></td>
       </tr>
      </tbody>
     </table>
