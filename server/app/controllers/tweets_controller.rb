@@ -1,6 +1,5 @@
 class TweetsController < ApplicationController
   def recent
-    Tweet.ordered_json
     tweets = Tweet.ordered_json
     render json: tweets
   end
@@ -14,6 +13,10 @@ class TweetsController < ApplicationController
     end
   end
 
+  def get
+    tweets
+  end
+
   def create
     params.permit!
     tweet = Tweet.new(params[:tweet])
@@ -25,7 +28,13 @@ class TweetsController < ApplicationController
 
     hashtags_names = params[:hashtags] || []
     hashtags_names.each do |name|
-      tweet.hashtags << Hashtag.first_or_create(name: name)
+      p name[:name]
+      new_hashtag = Hashtag.find_by(name: name[:name])
+      if new_hashtag
+        tweet.hashtags << new_hashtag
+      else
+        tweet.hashtags << Hashtag.create(name: name[:name])
+      end
     end
 
     render json: tweet.to_json(methods: :hashtag_names)
